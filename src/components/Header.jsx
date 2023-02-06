@@ -3,10 +3,11 @@ import NewBudget from './NewBudget'
 import BudgetDescription from './BudgetDescription'
 const Header = ({
   budget,
-  newBudget,
+  setBudget,
   isValidBudget,
   setIsValidBudget,
-  expenses
+  expenses,
+  setExpenses
 }) => {
   return (
     <header className='w-100 bg-indigo-800 p-4'>
@@ -14,11 +15,17 @@ const Header = ({
         Planificador de gastos
       </h1>
       {isValidBudget ? (
-        <BudgetDescription budget={budget} expenses={expenses} />
+        <BudgetDescription
+          budget={budget}
+          expenses={expenses}
+          setExpenses={setExpenses}
+          setBudget={setBudget}
+          setIsValidBudget={setIsValidBudget}
+        />
       ) : (
         <NewBudget
           budget={budget}
-          newBudget={newBudget}
+          newBudget={setBudget}
           setIsValidBudget={setIsValidBudget}
         />
       )}
