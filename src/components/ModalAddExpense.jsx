@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Message from './Message'
 import close from '../assets/img/cerrar.svg'
 
@@ -6,7 +6,9 @@ const ModalAddExpense = ({
   setIsModal,
   ismodalanimated,
   setIsModalAnimated,
-  saveChanges
+  saveChanges,
+  editExpenses,
+  setEditExpenses
 }) => {
   // state of form
   const [name, setName] = useState('')
@@ -14,7 +16,19 @@ const ModalAddExpense = ({
   const [category, setCategory] = useState('')
   // state of message of advirtisment
   const [msg, setMsg] = useState(false)
+  const [id, setId] = useState('')
+  const [date, setDate] = useState('')
 
+  useEffect(() => {
+    if (Object.keys(editExpenses).length > 0) {
+      setName(editExpenses.name)
+      setAmount(editExpenses.amount)
+      setCategory(editExpenses.category)
+      setId(editExpenses.id)
+      setDate(editExpenses.date)
+    }
+    console.log(editExpenses.id)
+  }, [])
   // manage submit form to add expense to saveChanges
   const handleSubmitExpense = (e) => {
     e.preventDefault()
@@ -23,17 +37,18 @@ const ModalAddExpense = ({
       return
     }
     setMsg(false)
-    saveChanges({ name, amount, category })
+    saveChanges({ name, amount, category, id, date })
   }
   // close the modal and set change of css to animated it
   const handleCloseModal = () => {
     setIsModalAnimated(false)
+    setEditExpenses({})
     setTimeout(() => {
       setIsModal(false)
     }, 500)
   }
   return (
-    <div className='absolute top-0 w-full h-full bg-black bg-opacity-80 '>
+    <div className='absolute top-0 w-full h-full bg-black bg-opacity-80'>
       <button type='button' onClick={handleCloseModal}>
         <img
           src={close}
@@ -47,7 +62,9 @@ const ModalAddExpense = ({
           ismodalanimated ? 'animar' : 'opacity-0'
         }`}
       >
-        <h2 className='text-xl uppercase font-bold'>Nuevo Gasto</h2>
+        <h2 className='text-xl uppercase font-bold'>
+          {editExpenses.name ? 'Editar Gasto' : 'Nuevo Gasto'}
+        </h2>
         <form className='flex flex-col gap-6' onSubmit={handleSubmitExpense}>
           <div className='flex flex-col gap-2'>
             <label htmlFor='name'>Nombre del gasto</label>
